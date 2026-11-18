@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Signify — لغة الإشارة للجميع</title>
+<meta name="description" content="Signify يساعد الناس العاديين على استخدام لغة الإشارة للتواصل. استكشف الخريطة التفاعلية وتحدث مع Signy.">
+<link rel="icon" href="assets/signy.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<header class="nav">
+  <a class="brand" href="#top"><img src="assets/signy.svg" alt="" width="34" height="34"><span dir="ltr">Signify</span></a>
+  <nav>
+    <a href="#map">الخريطة</a>
+    <a href="#signy">Signy</a>
+  </nav>
+</header>
+
+<main id="top">
+  <section class="hero">
+    <p class="eyebrow">لغة الإشارة للجميع</p>
+    <h1>تكلّم بيديك.<br><span>ويفهمك الجميع.</span></h1>
+    <p class="lead">استكشف الخريطة، واضغط على أي نقطة لتشاهد الإشارة، ثم اسأل Signy عن أي شيء.</p>
+    <a class="btn" href="#map">ابدأ الاستكشاف ↓</a>
+  </section>
+
+  <!-- 1) الخريطة التفاعلية -->
+  <section id="map" class="section">
+    <div class="section-head">
+      <h2>خريطة الإشارات التفاعلية</h2>
+      <p>اضغط على النقطة المضيئة لمشاهدة فيديو الإشارة.</p>
+    </div>
+
+    <div class="editbar" id="editbar" hidden>
+      <strong>وضع التعديل</strong>
+      <span>اضغط على الخريطة للإضافة · اسحب للتحريك · اضغط على نقطة للتعديل</span>
+      <button id="btn-export">تصدير الملف</button>
+      <button id="btn-reset" class="ghost">إعادة ضبط</button>
+    </div>
+
+    <div class="map-wrap">
+      <div class="map" id="mapStage" dir="ltr">
+        <img id="mapImg" src="assets/map/map.jpg" alt="خريطة لغة الإشارة التفاعلية" draggable="false">
+        <div id="pins"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 2) الشات بوت -->
+  <section id="signy" class="section section-alt">
+    <div class="section-head">
+      <h2>قابل <span dir="ltr">Signy</span></h2>
+      <p>مساعدك الودود في لغة الإشارة.</p>
+    </div>
+    <div class="chat">
+      <div class="chat-top">
+        <img src="assets/signy.svg" alt="صورة Signy" width="46" height="46">
+        <div><strong dir="ltr">Signy</strong><small>مساعد لغة الإشارة</small></div>
+      </div>
+      <div class="chat-log" id="chatLog" aria-live="polite"></div>
+      <div class="chips" id="chips"></div>
+      <form class="chat-form" id="chatForm" autocomplete="off">
+        <input id="chatInput" type="text" placeholder="اسأل Signy عن لغة الإشارة…" dir="auto" aria-label="رسالتك">
+        <button type="submit">إرسال</button>
+      </form>
+    </div>
+  </section>
+</main>
+
+<footer class="footer">© <span id="yr"></span> <span dir="ltr">Signify</span> · صُنع ليساعد الجميع على التواصل</footer>
+
+<!-- نافذة الفيديو -->
+<dialog id="videoModal" class="modal">
+  <div class="modal-card">
+    <button class="close" id="modalClose" aria-label="إغلاق">✕</button>
+    <h3 id="mTitle"></h3>
+    <div class="video-box">
+      <video id="mVideo" controls playsinline preload="metadata"></video>
+      <iframe id="mFrame" allowfullscreen allow="autoplay; encrypted-media" frameborder="0" hidden></iframe>
+      <div class="video-missing" id="mMissing" hidden>
+        <p>لم يتم العثور على الفيديو بعد.</p>
+        <small id="mPath" dir="ltr"></small>
+      </div>
+    </div>
+    <p id="mDesc"></p>
+  </div>
+</dialog>
+
+<!-- نافذة تعديل النقطة -->
+<dialog id="editModal" class="modal">
+  <form method="dialog" class="modal-card edit-card" id="editForm">
+    <h3>تعديل النقطة</h3>
+    <label>العنوان <input id="eTitle" type="text"></label>
+    <label>الوصف <textarea id="eDesc" rows="3"></textarea></label>
+    <label>مسار الفيديو <input id="eVideo" type="text" dir="ltr" placeholder="assets/videos/hello.mp4"></label>
+    <label>أو ارفع فيديو للمعاينة الآن
+      <input id="eFile" type="file" accept="video/*">
+    </label>
+    <small class="hint">الفيديو المرفوع هنا للمعاينة داخل متصفحك فقط. في الموقع النهائي انسخ الملف إلى <code dir="ltr">assets/videos/</code> واترك المسار أعلاه.</small>
+    <div class="row">
+      <button type="button" id="eSave">حفظ</button>
+      <button type="button" id="eDelete" class="danger">حذف</button>
+      <button type="button" id="eCancel" class="ghost">إلغاء</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="data/hotspots.js"></script>
+<script src="data/qa.js"></script>
+<script src="js/app.js"></script>
+<script src="js/chatbot.js"></script>
+</body>
+</html>
